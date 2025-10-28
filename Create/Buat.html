@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Birthday</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Gaya umum halaman */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      background-image: url('img/bg.jpg');
+      background-position: center;
+      background-size: cover;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Desain form input */
+    .input-form {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .input-form input,
+    .input-form textarea {
+      width: 95%;
+      margin: 15px 0;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      color: #333;
+      font-size: 1em;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .input-form input:focus,
+    .input-form textarea:focus {
+      background: #f9f9f9;
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-form button {
+      padding: 15px 30px;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      border: none;
+      color: #fff;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 6px 10px rgba(255, 70, 92, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .input-form button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(255, 70, 92, 0.5);
+    }
+
+    .input-form button:active {
+      transform: translateY(2px);
+      box-shadow: 0 4px 6px rgba(255, 70, 92, 0.3);
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: lightblue;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #ff416c;
+    }
+
+  </style>
+</head>
+
+<body>
+  <h1>Create Birthday</h1>
+
+  <div class="input-form">
+    <form id="updateForm">
+      <label for="teks1">Text 1</label>
+      <input type="text" id="teks1" placeholder="Teks 1" required>
+
+      <label for="teks2">Text 2</label>
+      <input type="text" id="teks2" placeholder="Teks 2" required>
+
+      <label for="teks3">Pesan panjang</label>
+      <textarea id="teks3" placeholder="Isi Pesan" required></textarea>
+
+      <button type="submit">Buat Link</button>
+    </form>
+  </div>
+  
+  <footer>
+    <p>Dibuat Oleh Edy | Cindy 
+  </footer>
+
+  <script>
+    const form = document.getElementById('updateForm');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Ambil nilai dari input
+      const teks1 = encodeURIComponent(document.getElementById('teks1').value);
+      const teks2 = encodeURIComponent(document.getElementById('teks2').value);
+      const teks3 = encodeURIComponent(document.getElementById('teks3').value);
+
+
+      // Buat link dengan query string
+      const link = `https://epromod.github.io/Bucin/Create/index.html?teks1=${teks1}&teks2=${teks2}&teks3=${teks3}`;
+
+      // Tampilkan notifikasi dengan SweetAlert2
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        html: `copy link dibawah ini ya:<br><a href="${link}" target="_blank">${link}</a>`,
+        confirmButtonColor: '#36d1dc',
+      });
+    });
+    
+  </script>
+</body>
+
+</html>

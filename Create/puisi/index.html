@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puisi untuk Kekasihku</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Gaya utama */
+    body {
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(to bottom, #141e30, #243b55);
+      background-image: url('gambar/nightcar.jpg');
+      background-position: center;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: rgb(91, 240, 227);
+      overflow: hidden;
+    }
+
+    .container {
+      background: linear-gradient(145deg, rgb(114, 106, 57), rgba(255, 215, 0, 3));
+      background-image: url('gambar/nightcar.jpg');
+      background-position: center;
+      background-size: cover;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      margin: 20px auto;
+      text-align: center;
+      max-width: 700px;
+      min-height: 300px;
+      position: relative;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      color: #e2c119;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+      margin-bottom: 20px;
+      animation: slideDown 2s ease-out;
+    }
+
+    .poem-container {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .poem {
+      font-size: 1em;
+      line-height: 1.8;
+      text-align: center;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #edf3c9;
+    }
+
+    /* Efek animasi */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Tombol Kontrol Musik */
+    .control-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50px;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      font-family: 'Playfair Display', serif;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      margin-bottom: 10px;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Audio untuk Musik -->
+  <audio id="background-music" loop>
+    <source src="music/thousand.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div id="snow"></div>
+
+  <!-- Kontainer Utama -->
+  <div class="container">
+    <h2 class="title">Untuk Kekasihku</h2>
+    <div class="poem-container">
+      <div class="poem" id="poem"></div>
+    </div>
+    <p class="signature" id="signature"></p>
+  </div>
+  <!-- Tombol Kontrol Musik -->
+  <div class="control-btn" id="music-control">Musik</div>
+
+  <script>
+    // Ambil data dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Ambil puisi dan tanda tangan dari query string
+    const poemText = decodeURIComponent(urlParams.get('poem') || 'Puisi belum diisi.');
+    const signatureText = decodeURIComponent(urlParams.get('signature') || 'Nama belum diisi.');
+
+    // Tampilkan teks puisi dengan efek ketik
+    const poemElement = document.getElementById('poem');
+    let words = poemText.split(' ');
+    let currentWordIndex = 0;
+
+    function typeWord() {
+      if (currentWordIndex < words.length) {
+        poemElement.innerHTML += words[currentWordIndex] + ' ';
+        currentWordIndex++;
+        setTimeout(typeWord, 500); // Ketik setiap kata setiap 500ms
+      }
+    }
+    typeWord();
+
+    // Tampilkan tanda tangan
+    document.getElementById('signature').innerText = signatureText;
+
+    // Efek salju
+    const snowContainer = document.getElementById('snow');
+
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.style.position = 'absolute';
+      snowflake.style.left = Math.random() * window.innerWidth + 'px';
+      snowflake.style.top = '-10px';
+      snowflake.style.opacity = Math.random();
+      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+      snowflake.style.color = 'white';
+      snowflake.textContent = '❄';
+      snowContainer.appendChild(snowflake);
+
+      let fallInterval = setInterval(() => {
+        snowflake.style.top = (parseInt(snowflake.style.top || '0') + 2) + 'px';
+        if (parseInt(snowflake.style.top || '0') > window.innerHeight) {
+          snowflake.remove();
+          clearInterval(fallInterval);
+        }
+      }, 50);
+    }
+
+    // Buat salju terus-menerus
+    setInterval(createSnowflake, 100);
+
+    // Kontrol Musik
+    const musicControl = document.getElementById('music-control');
+    const backgroundMusic = document.getElementById('background-music');
+    backgroundMusic.play();
+
+    musicControl.addEventListener('click', () => {
+      if (backgroundMusic.paused) {
+        backgroundMusic.play();
+        musicControl.textContent = 'Hentikan Musik';
+      } else {
+        backgroundMusic.pause();
+        musicControl.textContent = 'Mainkan Musik';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buat Pesan Kamu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Gaya Umum */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('gambar/nightcar.jpg');
+      background-position: center;
+      background-size: cover;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-image: url('gambar/nightcar.jpg');
+      background-position: center;
+      background-size: cover;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      padding: 25px 30px;
+      text-align: center;
+    }
+
+    .btn {
+            padding: 15px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 6px 10px rgba(255, 70, 92, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 70, 92, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 6px rgba(255, 70, 92, 0.3);
+        }
+
+        .btn-secondary {
+            margin-top: 15px;
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(79, 172, 254, 0.5);
+        }
+
+     h1 {
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      color: #4facfe;
+     }
+
+     form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+     }
+
+     label {
+      font-size: 1em;
+      text-align: left;
+      color: #d8c0c0;
+    }
+
+    input[type="text"] {
+      width: 95%;
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #4facfe;
+      box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+
+    footer a {
+      color: #4facfe;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #36d1dc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Input Pesan</h1>
+    <form id="messageForm">
+      <label for="message1">Pesan 1:</label>
+      <input type="text" id="message1" placeholder="Masukkan pesan pertama..." required />
+
+      <label for="message2">Pesan 2:</label>
+      <input type="text" id="message2" placeholder="Masukkan pesan kedua..." required />
+
+      <label for="message3">Pesan 3:</label>
+      <input type="text" id="message3" placeholder="Masukkan pesan ketiga..." required />
+
+      <label for="message4">Pesan 4:</label>
+      <input type="text" id="message4" placeholder="Masukkan pesan keempat..." required />
+
+      <label for="message5">Pesan 5:</label>
+      <input type="text" id="message5" placeholder="Masukkan pesan kelima..." required />
+
+      <label for="ngetik">Pesan panjang:</label>
+      <input type="text" id="ngetik" placeholder="Masukkan pesan keenam..." required />
+
+      <button type="submit" class="btn">Buat Link</button>
+    </form>
+  
+    <footer>
+      Dibuat oleh <a href="#">Edy & Cindy</a>
+    </footer>
+
+  </div>
+
+  <script>
+    const form = document.getElementById('messageForm');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Ambil nilai dari input
+      const message1 = encodeURIComponent(document.getElementById('message1').value);
+      const message2 = encodeURIComponent(document.getElementById('message2').value);
+      const message3 = encodeURIComponent(document.getElementById('message3').value);
+      const message4 = encodeURIComponent(document.getElementById('message4').value);
+      const message5 = encodeURIComponent(document.getElementById('message5').value);
+      const ngetik = encodeURIComponent(document.getElementById('ngetik').value);
+
+      // Buat link dengan query string
+      const link = `https://epromod.github.io/Bucin/Create/foryou/index.html?message1=${message1}&message2=${message2}&message3=${message3}&message4=${message4}&message5=${message5}&ngetik=${ngetik}`;
+
+      // Tampilkan notifikasi dengan SweetAlert2
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        html: `copy link dibawah ini ya:<br><a href="${link}" target="_blank">${link}</a>`,
+        confirmButtonColor: '#36d1dc',
+      });
+    });
+
+  </script>
+</body>
+
+</html>
