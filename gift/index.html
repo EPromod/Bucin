@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lihat Hadiah</title>
+    <link rel="icon" href="hadia.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="apple-touch-icon" sizes="180x180" href="hadia.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="hadia.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="hadia.png">
+    <link rel="manifest" href="webmanifest">
+    <meta property="og:title" content="Menu Pilihan">
+    <meta property="og:description" content="All in One">
+    <meta property="og:image" content="hadia.png">
+    <meta property="og:url" content="https://epromod.github.io/Bucin/gift/create/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Menu Pilihan">
+    <meta name="twitter:description" content="All in One">
+    <meta name="twitter:image" content="hadia.png">
+    <meta name="twitter:url" content="https://epromod.github.io/Bucin/gift/create/">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f7f8fc;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .gift-card {
+            background-image: url(kertas.jpg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1; /* Turunkan z-index */
+        }
+
+        .gift-header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .gift-header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-image-container {
+            position: relative;
+            overflow: hidden;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 6px solid #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gift-image:hover {
+            transform: scale(1.1);
+        }
+
+        .gift-body {
+            padding: 30px;
+        }
+
+        p {
+            color: hsl(244, 96%, 49%);
+            font-size: 25px;
+            text-align: center;
+            text-shadow: #333;
+            font-weight: bold;
+        }
+
+        .gift-message {
+            font-size: 19px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: hsl(300, 89%, 33%);
+            font-weight: bold;
+            text-shadow: #333;
+            text-align: center;
+        }
+
+        .gift-music {
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .gift-music i {
+            margin-right: 5px;
+            text-align: center;
+        }
+
+        .share-button-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .share-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .share-button:hover {
+            background-color: #367c39;
+        }
+
+        .share-button i {
+            margin-right: 8px;
+        }
+
+        .top-right-label {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f00;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 7px;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .top-right-label i {
+            margin-right: 7px;
+        }
+
+        /* Style untuk elemen yang berjatuhan */
+        .falling-elements-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2; /* Naikkan z-index */
+        }
+
+        .falling-element {
+            position: absolute;
+            top: -100px;
+            white-space: nowrap;
+            z-index: 1;
+            pointer-events: none;
+            animation: falling linear infinite;
+        }
+
+        @keyframes falling {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gift-card {
+                width: 98%;
+            }
+
+            .gift-header {
+                padding: 30px;
+            }
+
+            .gift-header h1 {
+                font-size: 28px;
+            }
+
+            .gift-image-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .gift-message {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="falling-elements-container"></div>
+
+    <div class="gift-card" id="gift-details">
+        <div class="top-right-label">
+            <i class="fas fa-gift"></i> HADIAH
+        </div>
+        <div class="gift-header">
+            <h1>Hadiah Spesial!</h1>
+            <div class="gift-image-container">
+                <img src="" alt="Gambar Hadiah" class="gift-image" id="gift-image">
+            </div>
+        </div>
+        <div class="gift-body">
+            <p>Untuk <span id="gift-recipient"></span></p>
+            <p class="gift-message" id="gift-message"></p>
+            <p class="gift-music"><i class="fas fa-music"></i>Musik: <span id="gift-music"></span></p>
+            <audio controls id="gift-audio"></audio>
+        </div>
+
+        <div class="share-button-container">
+            <button class="share-button" onclick="shareGift()">
+                <i class="fas fa-share-alt"></i> Bagikan Hadiah
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giftDataParam = urlParams.get('giftData');
+
+            if (giftDataParam) {
+                try {
+                    const gift = JSON.parse(decodeURIComponent(giftDataParam));
+
+                    document.getElementById('gift-recipient').innerText = gift.recipientName;
+                    document.getElementById('gift-message').innerText = gift.message || "Tidak ada pesan.";
+
+                    const imageElement = document.getElementById('gift-image');
+                    if (gift.imageUrl) {
+                        imageElement.src = gift.imageUrl;
+                    } else {
+                        imageElement.style.display = 'none';
+                    }
+
+                    const musicElement = document.getElementById('gift-music');
+                    const audioElement = document.getElementById('gift-audio');
+
+                    if (gift.musicUrl) {
+                        musicElement.innerText = "Musik tersedia";
+                        audioElement.src = gift.musicUrl;
+                        audioElement.controls = true;
+                    } else {
+                        musicElement.innerText = "Tidak ada musik dipilih";
+                        audioElement.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error("Error parsing gift data:", error);
+                    document.getElementById('gift-details').innerHTML = '<p>Data hadiah tidak valid.</p>';
+                }
+            } else {
+                document.getElementById('gift-details').innerHTML = '<p>Tidak ada data hadiah ditemukan.</p>';
+            }
+
+            // JavaScript untuk membuat efek love/bunga berjatuhan
+            const fallingElementsContainer = document.querySelector('.falling-elements-container');
+            const numberOfElements = 20;
+            const elements = ['❤️', '🌸', '🌷', '🌹', '🌼', '💖'];
+
+            function createFallingElement() {
+                const element = document.createElement('span');
+                element.classList.add('falling-element');
+                element.innerText = elements[Math.floor(Math.random() * elements.length)];
+                const size = Math.random() * 20 + 15;
+                element.style.fontSize = `${size}px`;
+                element.style.left = `${Math.random() * 100}vw`;
+                element.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                fallingElementsContainer.appendChild(element);
+            }
+
+            for (let i = 0; i < numberOfElements; i++) {
+                createFallingElement();
+            }
+        });
+
+        function shareGift() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Hadiah Spesial untukmu!',
+                    text: 'Lihat hadiah yang telah disiapkan untukmu.',
+                    url: window.location.href,
+                })
+                    .then(() => console.log('Berhasil dibagikan'))
+                    .catch((error) => console.log('Error berbagi:', error));
+            } else {
+                alert('Fitur berbagi tidak didukung di browser ini.');
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3FkeK2CzZhtHZba0vKROHR6mHmCZPpFQHfUcFunKDUvHB5XeoYYAfEW6S5oq3YRrmlGoeDNnNtJiQeUfQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Hadiah</title>
+    <!-- Favicon - Using hadia.png consistent with display page -->
+    <link rel="icon" href="../hadia.png" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="../hadia.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../hadia.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../hadia.png">
+    <!-- Link to manifest if needed -->
+    <!-- <link rel="manifest" href="../webmanifest"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f7f8fc;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .gift-form-container {
+            /* Using the same background as display page */
+            background-image: url(../kertas.jpg);
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px; /* Slightly more padding */
+            width: 100%;
+            max-width: 450px; /* Slightly wider */
+            /* Efek Neon */
+            animation: neon-glow 3s ease-in-out infinite alternate;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+        }
+
+        /* Keyframes Animation */
+        @keyframes neon-glow {
+            0% { box-shadow: 0 0 8px #0ff, 0 0 15px #0ff, 0 0 20px #0ff; }
+            25% { box-shadow: 0 0 8px #f0f, 0 0 15px #f0f, 0 0 20px #f0f; }
+            50% { box-shadow: 0 0 8px #ff0, 0 0 15px #ff0, 0 0 20px #ff0; }
+            75% { box-shadow: 0 0 8px #0f0, 0 0 15px #0f0, 0 0 20px #0f0; }
+            100% { box-shadow: 0 0 8px #00f, 0 0 15px #00f, 0 0 20px #00f; }
+        }
+
+        .gift-form-container h1 {
+            font-size: 24px; /* Slightly larger */
+            margin-bottom: 20px;
+            text-align: center;
+            color: #6a11cb;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 18px; /* Spacing between form groups */
+        }
+
+        .gift-form-container label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #555; /* Slightly darker label color */
+        }
+
+        .gift-form-container input[type="text"],
+        .gift-form-container input[type="file"],
+        .gift-form-container textarea,
+        .gift-form-container button {
+            width: 100%;
+            padding: 12px; /* More padding */
+            border: 1px solid #ccc; /* Lighter border */
+            border-radius: 6px; /* Slightly more rounded */
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            color: #333;
+        }
+
+         .gift-form-container input[type="file"] {
+            padding: 8px; /* Adjust file input padding */
+         }
+
+        .gift-form-container textarea {
+            resize: vertical; /* Allow vertical resize */
+            min-height: 80px;
+        }
+
+        .gift-form-container button {
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient button */
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px; /* Space above button */
+        }
+
+        .gift-form-container button:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+         .gift-form-container button:disabled {
+             background: #ccc;
+             cursor: not-allowed;
+         }
+
+        #shareable-link-container {
+            margin-top: 25px;
+            display: none; /* Initially hidden */
+        }
+
+        #shareable-link {
+             width: 100%;
+             padding: 10px;
+             margin-top: 5px;
+             border: 1px solid #ccc;
+             border-radius: 6px;
+             font-size: 12px; /* Smaller font for link */
+             box-sizing: border-box;
+             background-color: #e9e9e9;
+             word-wrap: break-word; /* Wrap long URLs */
+             resize: none; /* Disable textarea resize */
+        }
+
+        #loading-message {
+            text-align: center;
+            margin-top: 15px;
+            color: #6a11cb;
+            font-style: italic;
+            display: none; /* Initially hidden */
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            .gift-form-container {
+                padding: 20px;
+                max-width: 95%;
+            }
+
+            .gift-form-container h1 {
+                font-size: 22px;
+            }
+
+             .gift-form-container input[type="text"],
+             .gift-form-container input[type="file"],
+             .gift-form-container textarea,
+             .gift-form-container button {
+                 padding: 10px;
+                 font-size: 13px;
+             }
+             .gift-form-container input[type="file"] {
+                padding: 6px;
+             }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gift-form-container">
+        <h1>Buat Hadiah</h1>
+        <form id="gift-form">
+            <label for="recipient-name">Nama Penerima</label>
+            <input type="text" id="recipient-name" name="recipientName" placeholder="Masukkan nama penerima" required>
+
+            <label for="message">Pesan Anda</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tambahkan pesan (opsional)"></textarea>
+
+            <label for="image">Pilih Gambar (JPG, PNG, JPEG)</label>
+            <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
+
+            <label for="music-file">Pilih Musik dari Internal</label>
+            <input type="file" id="music-file" name="musicFile" accept=".mp3,.wav,.ogg">
+
+            <button type="button" id="send-gift">Buat Hadiah</button>
+        </form>
+
+        <div id="shareable-link-container">
+            <label for="shareable-link">Tautan untuk Dibagikan:</label>
+            <textarea id="shareable-link" rows="3" readonly></textarea>
+        </div>
+    </div>
+    
+            <script>
+            document.getElementById('send-gift').addEventListener('click', async () => {
+            const recipientName = document.getElementById('recipient-name').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const imageFile = document.getElementById('image').files[0];
+            const musicFile = document.getElementById('music-file').files[0];
+
+            if (!recipientName) {
+                alert("Harap isi nama penerima!");
+                return;
+            }
+
+            let imageUrl = null;
+            if (imageFile) {
+                imageUrl = URL.createObjectURL(imageFile); // Create temporary URL
+            }
+
+            let musicUrl = null;
+            if (musicFile) {
+                musicUrl = URL.createObjectURL(musicFile); // Create temporary URL
+            }
+
+            const giftData = {
+                recipientName,
+                message,
+                imageUrl,
+                musicUrl
+            };
+
+            // Create a shareable link with the gift data as a parameter
+            const baseUrl = 'https://epromod.github.io/Bucin/gift/'; // Make sure this is correct!
+            const shareableLink = `${baseUrl}?giftData=${encodeURIComponent(JSON.stringify(giftData))}`;
+
+            const shareableLinkTextarea = document.getElementById('shareable-link');
+            shareableLinkTextarea.value = shareableLink;
+
+            const shareableLinkContainer = document.getElementById('shareable-link-container');
+            shareableLinkContainer.style.display = 'block';
+            shareableLinkTextarea.style.display = 'block';
+
+            alert("Tautan hadiah telah dibuat! Salin dan bagikan dengan temanmu.");
+        });
+    </script>
+</body>
+
+</html>
