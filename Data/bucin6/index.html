@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Kamu</title>
+    <!-- Google Font: Dancing Script untuk tulisan sambung -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Dancing Script', cursive;
+            background-image: url('IMG-20260713-WA0004.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            background: transparent; /* Latar belakang tetap transparan */
+            padding: 40px;
+            text-align: center;
+            border: none;
+            box-shadow: none;
+            width: 100%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+        }
+
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+            font-size: 1.2rem;
+            font-family: 'Dancing Script', cursive;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        button {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-family: 'Dancing Script', cursive;
+            transition: 0.3s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        button:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .hidden { display: none; }
+
+        #result-text {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            margin-top: 20px;
+            text-align: justify;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+        }
+
+          /* Gaya Teks Nama Pojok Kanan Bawah (Pudar) */
+        .watermark-name {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 5; /* Berada di atas overlay dan video */
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.35); /* Menggunakan alpha 0.35 agar efeknya pudar */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            pointer-events: none; /* Agar tidak mengganggu klik di layar */
+            user-select: none; /* Agar teks tidak bisa diblok/diseleksi */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <!-- Elemen Audio -->
+    <audio id="bgMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Step 1: Awal -->
+    <div class="card" id="step1">
+        <h1>Untuk Kamu</h1>
+        <p>Di bawah cahaya rembulan, ada sesuatu yang ingin kusampaikan...</p>
+        <button onclick="showInput()">🌹 Buka Pesan</button>
+    </div>
+
+    <!-- Step 2: Input Nama -->
+    <div class="card hidden" id="step2">
+        <h1>Masukan nama kamu dulu ya</h1>
+        <input type="text" id="userName" placeholder="Tulis namamu di sini...">
+        <br>
+        <button onclick="showResult()">🌙 Lihat Pesan</button>
+    </div>
+
+    <!-- Step 3: Hasil -->
+    <div class="card hidden" id="step3">
+        <h1>Halo, <span id="displayName"></span></h1>
+        <div id="result-text"></div>
+        <br>
+        <button onclick="balasWhatsApp()">Balas ke WhatsApp 💬</button>
+    </div>
+
+          <!-- Teks Nama di Pojok Kanan Bawah -->
+    <div class="watermark-name">Edy | Cindy</div>
+
+
+    <script>
+        const pesanLengkap = "Seperti mawar merah yang mekar dengan anggun di bawah sinar rembulan, kehadiranmu adalah keindahan yang paling tenang dalam hidupku. Malam ini terasa lebih istimewa karena namamu terukir indah di dalam hatiku. Terima kasih telah menjadi bagian dari duniaku, memberikan warna di setiap sudut yang kelabu, dan membawa kedamaian yang tak pernah kubayangkan sebelumnya. Teruslah bersinar, karena cahayamu jauh lebih terang daripada bulan di atas sana. Aku selalu di sini, menjaga perasaan ini tetap mekar, sama seperti mawar yang tak pernah layu oleh waktu.";
+        
+        function showInput() {
+            // Memulai musik saat tombol diklik
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(e => console.log("Autoplay dicegah oleh browser."));
+            
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        function showResult() {
+            const name = document.getElementById('userName').value;
+            if (name.trim() === "") {
+                alert("Tolong masukkan nama terlebih dahulu ya.");
+                return;
+            }
+            document.getElementById('displayName').innerText = name;
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            
+            typeWriter(pesanLengkap, document.getElementById('result-text'), 0);
+        }
+
+        function balasWhatsApp() {
+            const nama = document.getElementById('displayName').innerText;
+            const pesan = `Halo, aku sudah membaca pesan untuk ${nama}. Pesannya sangat indah!`;
+            // Ganti 628xxxxxxxxxx dengan nomor tujuan Anda
+            const nomorWhatsApp = ""; 
+            window.open(`https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`, '_blank');
+        }
+
+        function typeWriter(text, element, index) {
+            if (index < text.length) {
+                element.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(() => typeWriter(text, element, index), 50);
+            }
+        }
+
+         // untuk security
+                     
+       document.addEventListener('keydown', function(event) {
+    // Menonaktifkan Ctrl+S (Simpan)
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        alert('Menyimpan halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+P (Cetak)
+    if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault();
+        alert('Mencetak halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+U (Lihat Sumber Halaman)
+    if (event.ctrlKey && event.key === 'u') {
+        event.preventDefault();
+        alert('Melihat sumber halaman dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+F dan Ctrl+G (Kolom Pencarian)
+    if (event.ctrlKey && (event.key === 'f' || event.key === 'g')) {
+        event.preventDefault();
+        alert('Fungsi pencarian di halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+C (Salin)
+    if (event.ctrlKey && event.key === 'c') {
+        event.preventDefault();
+        alert('Menyalin konten dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+A (Pilih Semua)
+    if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault();
+        alert('Memilih semua konten dinonaktifkan.');
+    }
+
+    // Menonaktifkan F12 (Alat Pengembang)
+    if (event.key === 'F12') {
+        event.preventDefault();
+        alert('Alat pengembang dinonaktifkan.');
+    }
+});
+
+// Menonaktifkan menu klik kanan (menu konteks)
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    alert('Klik kanan dinonaktifkan.');
+});
+
+    </script>
+</body>
+</html>

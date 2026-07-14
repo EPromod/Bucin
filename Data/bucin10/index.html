@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satu Bangku di Bawah Langit Galaksi</title>
+    <!-- Google Fonts: Sacramento untuk tulisan sambung, Poppins untuk teks modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #030a16;
+        }
+
+        /* Latar Belakang Gambar Bangku & Langit Malam */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG-20260712-WA0018.jpg'); /* Pastikan nama file ini sesuai */
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Overlay dingin kebiruan malam hari */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Canvas Efek Debu Bintang Melayang miring */
+        #cosmic-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* --- WIDGET SLIDER HORIZONTAL --- */
+        .slider-container {
+            position: relative;
+            z-index: 4;
+            width: 300%; /* 3 Slide Berdampingan */
+            height: 100%;
+            display: flex;
+            transition: transform 1.2s cubic-bezier(0.86, 0, 0.07, 1); /* Efek geser melambat yang dramatis */
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .box-container {
+            max-width: 500px;
+            width: 95%;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- STYLE BARU: TOMBOL IKON BERLIAN (NON-LINGKARAN) --- */
+        .diamond-btn-container {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Tombol berbentuk belah ketupat */
+        .diamond-btn {
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(135deg, #0d9488, #115e59);
+            border: 2px solid rgba(204, 251, 241, 0.5);
+            border-radius: 12px; /* Membuat sudut berlian sedikit halus */
+            transform: rotate(45deg); /* Memutar kotak menjadi belah ketupat */
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(20, 184, 166, 0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #ccfbf1;
+        }
+
+        /* Menjaga agar SVG di dalam berlian tetap tegak (tidak ikut miring) */
+        .diamond-btn svg {
+            transform: rotate(-45deg);
+            transition: transform 0.4s ease;
+        }
+
+        /* Efek Denyut Berbentuk Berlian di Luar */
+        .diamond-pulse {
+            position: absolute;
+            width: 76px;
+            height: 76px;
+            border: 1.5px solid rgba(45, 212, 191, 0.4);
+            border-radius: 14px;
+            transform: rotate(45deg);
+            animation: diamond-ripple 2.5s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .diamond-btn-container:hover .diamond-btn {
+            transform: rotate(135deg) scale(1.1); /* Berputar estetik saat di-hover */
+            box-shadow: 0 0 35px rgba(45, 212, 191, 1);
+            background: linear-gradient(135deg, #14b8a6, #0f766e);
+            color: #ffffff;
+        }
+
+        /* SVG ikut berputar berlawanan agar tetap tegak lurus sempurna saat hover */
+        .diamond-btn-container:hover .diamond-btn svg {
+            transform: rotate(-135deg) scale(0.95);
+        }
+
+        @keyframes diamond-ripple {
+            0% { transform: rotate(45deg) scale(0.8); opacity: 1; }
+            100% { transform: rotate(45deg) scale(1.4); opacity: 0; box-shadow: 0 0 20px rgba(45, 212, 191, 0.5); }
+        }
+
+        /* --- SLIDE 1: SAMBUTAN --- */
+        .opening-greeting {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: #ccfbf1;
+            text-shadow: 0 0 12px rgba(20, 184, 166, 0.7), 0 2px 10px rgba(0,0,0,0.9);
+            margin-bottom: 25px;
+        }
+
+        /* --- SLIDE 2: INPUT NAMA MINIMALIS --- */
+        .name-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .name-wrapper label {
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
+            color: #99f6e4;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            line-height: 1.5;
+        }
+
+        .name-input {
+            width: 100%;
+            max-width: 320px;
+            padding: 14px;
+            background: rgba(3, 10, 22, 0.7);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 8px; /* Menggunakan kotak bersudut halus, bukan lingkaran */
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .name-input:focus {
+            border-color: #2dd4bf;
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+        }
+
+        /* --- SLIDE 3: TULISAN TANGAN GALAXY SHADOW --- */
+        .letter-box {
+            width: 100%;
+            max-height: 75vh;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .letter-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        .letter-box::-webkit-scrollbar-thumb {
+            background: rgba(45, 212, 191, 0.3);
+            border-radius: 10px;
+        }
+
+        .romantic-text {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.6rem; 
+            line-height: 1.4;
+            color: #f0fdfa; 
+            text-shadow: 
+                2px 2px 6px rgba(0, 0, 0, 1), 
+                -2px -2px 6px rgba(0, 0, 0, 1),
+                0px 0px 20px rgba(20, 184, 166, 0.6);
+            margin-bottom: 30px;
+            word-wrap: break-word;
+        }
+
+        /* Tombol Balas WhatsApp (Sleek Rounded Square) */
+        .wa-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px; /* Menggunakan bentuk kotak bersudut tumpul */
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 290px;
+            margin: 10px auto;
+        }
+
+        .wa-btn.show {
+            opacity: 1;
+            transform: scale(1);
+            display: inline-flex;
+        }
+
+        .wa-btn:hover {
+            background-color: #128C7E;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: #f0fdfa;
+            animation: blink 0.6s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- WATERMARK NAMA PUDAR (POJOK KANAN BAWAH) --- */
+        .watermark-name {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 5;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.35);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Latar Belakang & Overlay -->
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <!-- Musik Latar -->
+    <audio id="romantic-music" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Canvas Efek Partikel Debu Bintang Melayang -->
+    <canvas id="cosmic-canvas"></canvas>
+
+    <!-- CONTAINER SLIDER HORIZONTAL -->
+    <div class="slider-container" id="mainSlider">
+        
+        <!-- ================= SLIDE 1: SAMBUTAN (GULIRAN 1) ================= -->
+        <div class="slide">
+            <div class="box-container">
+                <h1 class="opening-greeting">Menyusuri Dinginnya Malam...</h1>
+                
+                <!-- Diamond Button Container -->
+                <div class="diamond-btn-container" onclick="geserKeKanan(1)">
+                    <div class="diamond-pulse"></div>
+                    <button class="diamond-btn" aria-label="Temukan Arah">
+                        <!-- Icon Kompas (Astrolabe Navigasi) -->
+                        <svg width="26" height="26" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M10.182 5.818a.5.5 0 0 0-.53-.13l-4.5 1.5a.5.5 0 0 0-.292.292l-1.5 4.5a.5.5 0 0 0 .66.66l4.5-1.5a.5.5 0 0 0 .292-.292l1.5-4.5a.5.5 0 0 0-.13-.53zM8 9.001a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <span style="font-size: 0.8rem; letter-spacing: 2px; opacity: 0.7; color: #99f6e4; text-transform: uppercase; margin-top: 15px;">Arahkan Kompas</span>
+            </div>
+        </div>
+
+        <!-- ================= SLIDE 2: INPUT NAMA (GULIRAN 2) ================= -->
+        <div class="slide">
+            <div class="box-container">
+                <div class="name-wrapper">
+                    <label for="inputNama">Ada satu bangku kosong di sini.<br>Boleh tahu siapa namamu untuk menemaniku?</label>
+                    <input type="text" id="inputNama" class="name-input" placeholder="Tulis namamu di sini..." autocomplete="off">
+                    
+                    <!-- Diamond Button Container untuk Kirim Nama -->
+                    <div class="diamond-btn-container" onclick="geserKeKanan(2)">
+                        <div class="diamond-pulse"></div>
+                        <button class="diamond-btn" style="background: linear-gradient(135deg, #0f766e, #134e4a);" aria-label="Simpan">
+                            <!-- Icon Bintang Utara (8-Point Sparkle Star) -->
+                            <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l2.4 5.3 5.3 2.4-5.3 2.4-2.4 5.3-2.4-5.3-5.3-2.4 5.3-2.4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <span style="font-size: 0.75rem; letter-spacing: 2px; opacity: 0.6; color: #2dd4bf; text-transform: uppercase; margin-top: 15px;">Ikuti Bintang</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SLIDE 3: PESAN ROMANTIS (AKHIR GULIRAN) ================= -->
+        <div class="slide">
+            <div class="box-container">
+                <div class="letter-box" id="kotakSurat">
+                    <div class="romantic-text">
+                        <span id="text-typing"></span><span class="cursor" id="kursor">|</span>
+                    </div>
+                    <a href="#" id="tombolWA" class="wa-btn" target="_blank">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.854 7.854 0 0 0 12.41 0H3.59A7.854 7.854 0 0 0 .707 2.326a8.857 8.857 0 0 0-1.07 4.195c0 2.308.814 4.503 2.31 6.223l-.963 3.507 3.597-.944a8.841 8.841 0 0 0 4.19 1.056h.003A7.854 7.854 0 0 0 16 8.583a8.857 8.857 0 0 0-2.399-6.257zM14.75 8.583a7.126 7.126 0 0 1-2.119 5.097 6.305 6.305 0 0 1-4.636 1.942H7.99c-1.391-.004-2.757-.373-3.951-1.066l-.283-.168-2.398.63.64-2.332-.185-.296A7.16 7.16 0 0 1 1.25 8.583a7.126 7.126 0 0 1 2.119-5.097A6.305 6.305 0 0 1 7.99 1.543h.004c1.865 0 3.617.726 4.933 2.042a7.126 7.126 0 0 1 2.123 5.098z"/>
+                        </svg>
+                        Balas Pesan ke WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Teks Watermark Nama Edy | Cindy di Pojok Kanan Bawah -->
+    <div class="watermark-name">Edy | Cindy</div>
+
+    <script>
+        const mainSlider = document.getElementById("mainSlider");
+        const musik = document.getElementById("romantic-music");
+        const textElement = document.getElementById("text-typing");
+        const tombolWA = document.getElementById("tombolWA");
+        const kotakSurat = document.getElementById("kotakSurat");
+
+        let index = 0;
+        let pesanRomantis = "";
+
+        // Fungsi kontrol geser layar ke samping
+        function geserKeKanan(slideKe) {
+            if (slideKe === 1) {
+                // Mainkan musik saat mulai menggeser
+                musik.play().catch(e => console.log("Musik tertahan browser: ", e));
+                
+                // Guliran ke-1: Geser ke Slide 2
+                mainSlider.style.transform = "translateX(-100vw)";
+            } 
+            else if (slideKe === 2) {
+                const namaUser = document.getElementById("inputNama").value.trim();
+                if (namaUser === "") {
+                    alert("Namamu jangan dikosongkan ya... 😊");
+                    return;
+                }
+
+                pesanRomantis = `Hai ${namaUser}, duduk sendirian di bangku dingin ini di bawah megahnya hamparan galaksi, aku sempat merasa sangat sepi. Ranting-ranting pohon yang membeku ini seolah ikut merasakan betapa sunyinya malam tanpa kehadiranmu. Namun, melihat pendaran bintang di atas sana, aku sadar bahwa sejauh apa pun jarak memisahkan kita, rindu ini akan selalu menemukan jalannya pulang kepadamu. Terima kasih telah menghangatkan hatiku yang dingin ini...`;
+
+                // Guliran ke-2: Geser ke Slide 3
+                mainSlider.style.transform = "translateX(-200vw)";
+                
+                // Mulai mengetik teks romantis setelah animasi slide selesai
+                setTimeout(() => {
+                    ketikKarakter();
+                }, 1300);
+            }
+        }
+
+        function ketikKarakter() {
+            if (index < pesanRomantis.length) {
+                textElement.innerHTML += pesanRomantis.charAt(index);
+                index++;
+                kotakSurat.scrollTop = kotakSurat.scrollHeight;
+                setTimeout(ketikKarakter, 85); 
+            } else {
+                document.getElementById("kursor").style.display = "none";
+                
+                const nomorWA = "628xxxxxxxxxx"; // GANTI DENGAN NOMOR WHATSAPP-MU
+                const isiBalasan = encodeURIComponent("Aku akan selalu menemanimu di setiap malam sunyimu... ❤️✨");
+                tombolWA.href = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${isiBalasan}`;
+                
+                tombolWA.style.display = "inline-flex";
+                setTimeout(() => {
+                    tombolWA.classList.add("show");
+                    kotakSurat.scrollTop = kotakSurat.scrollHeight;
+                }, 100);
+            }
+        }
+
+        // --- SCRIPT EFEK DEBU BINTANG NEBULA MELAYANG (COSMIC STARDUST EFFECT) ---
+        const canvas = document.getElementById('cosmic-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const stardustArray = [];
+        const dustCount = 50;
+
+        class Stardust {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = -(Math.random() * 0.4 + 0.1);
+                this.speedY = Math.random() * 0.2 + 0.1;
+                this.alpha = Math.random() * 0.7 + 0.1;
+                this.fadeSpeed = Math.random() * 0.005 + 0.002;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                this.alpha -= this.fadeSpeed;
+                if (this.alpha <= 0) {
+                    this.alpha = Math.random() * 0.7 + 0.3;
+                    this.x = Math.random() * canvas.width + 100;
+                    this.y = Math.random() * canvas.height * 0.6 - 50;
+                }
+
+                if (this.x < -10) this.x = canvas.width + 10;
+                if (this.y > canvas.height + 10) this.y = -10;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                
+                ctx.fillStyle = `rgba(153, 246, 228, ${this.alpha})`;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = 'rgba(45, 212, 191, 0.7)';
+                
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < dustCount; i++) {
+            stardustArray.push(new Stardust());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stardustArray.forEach(dust => {
+                dust.update();
+                dust.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+           // untuk security
+
+       document.addEventListener('keydown', function(event) {
+    // Menonaktifkan Ctrl+S (Simpan)
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        alert('Menyimpan halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+P (Cetak)
+    if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault();
+        alert('Mencetak halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+U (Lihat Sumber Halaman)
+    if (event.ctrlKey && event.key === 'u') {
+        event.preventDefault();
+        alert('Melihat sumber halaman dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+F dan Ctrl+G (Kolom Pencarian)
+    if (event.ctrlKey && (event.key === 'f' || event.key === 'g')) {
+        event.preventDefault();
+        alert('Fungsi pencarian di halaman ini dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+C (Salin)
+    if (event.ctrlKey && event.key === 'c') {
+        event.preventDefault();
+        alert('Menyalin konten dinonaktifkan.');
+    }
+
+    // Menonaktifkan Ctrl+A (Pilih Semua)
+    if (event.ctrlKey && event.key === 'a') {
+        event.preventDefault();
+        alert('Memilih semua konten dinonaktifkan.');                                                         }
+
+    // Menonaktifkan F12 (Alat Pengembang)
+    if (event.key === 'F12') {
+        event.preventDefault();
+        alert('Alat pengembang dinonaktifkan.');
+    }
+});
+
+// Menonaktifkan menu klik kanan (menu konteks)
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    alert('Klik kanan dinonaktifkan.');
+});
+    </script>
+</body>
+</html>
